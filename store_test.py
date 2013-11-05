@@ -18,9 +18,7 @@ ipython -c "import iopro, numbapro, llvmpy"
      ipython -c "import iopro, numbapro, llvmpy"
      check output message
      mv ~/.continuum/* licenses/.
-
- Will also need to create a 'store' directory with 'full' and 'licenses' dirs, then remove
- them when done"""
+"""
 
 def scrape_pkgs(version):
     """Find and download all Anaconda packages of a specified version
