@@ -2,11 +2,6 @@
 Continuum Store Tester
 ======================
 
-========
-Overview
-========
-
-
 The store tester is used to check the md5 and file size of any version of `Anaconda <https://store.continuum.io/cshop/anaconda/>`_ against the expected md5 and size listed in the archive.
 
 ===
