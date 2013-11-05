@@ -1,15 +1,12 @@
-======================
-Continuum Store Tester
-======================
+### Continuum Store Tester
 
-========
-Overview
-========
+
+### Overview
+
 The store tester is used to check the md5 and file size of any version of Anaconda against the expected md5 and size listed in the archive.
 
-===
-Use
-===
+
+### Use
 
 From the command line, run the script, giving the version of Anaconda as an argument
 
@@ -19,16 +16,12 @@ From the command line, run the script, giving the version of Anaconda as an argu
 
 Each version of Anaconda meeting this requirement will be downloaded from the Continuum archives, then checked.
 
-============
-Dependencies
-============
+### Dependencies
 
 `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_
 `termcolor <https://pypi.python.org/pypi/termcolor>`_
 
-====
-TODO
-====
+### TODO
 
 Add a progress bar for downloads.
 
