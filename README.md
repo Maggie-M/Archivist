@@ -10,8 +10,6 @@ The store tester is used to check the md5 and file size of any version of Anacon
 
 From the command line, run the script, giving the version of Anaconda as an argument
 
-.. code-block:: bash
-
     $ python store_test.py 1.5.0
 
 Each version of Anaconda meeting this requirement will be downloaded from the Continuum archives, then checked.
