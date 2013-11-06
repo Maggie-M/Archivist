@@ -20,8 +20,17 @@ Each version of Anaconda meeting this requirement will be downloaded from the `C
 Dependencies
 ============
 
-* `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_
+* `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_ - Now available in `Anaconda 1.8.0 <https://store.continuum.io/cshop/anaconda/>`_
+
+.. code-block:: bash
+
+   $ conda install beautiful-soup
+   
 * `termcolor <https://pypi.python.org/pypi/termcolor>`_
+
+.. code-block:: bash
+
+   $ pip install termcolor
 
 ====
 TODO
