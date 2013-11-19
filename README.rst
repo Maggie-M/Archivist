@@ -37,7 +37,5 @@ Dependencies
 TODO
 ====
 
-Add a progress bar for downloads.
-
 Automated license checking.
 
