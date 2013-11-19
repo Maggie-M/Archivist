@@ -51,7 +51,7 @@ def writer(location, package):
     if not os.path.exists("pkgs"):
         os.system("mkdir pkgs")
 
-    os.system("curl %s > pkgs/%s" % (download_path, package))         #'pkgs/%s' % package, 'w')
+    os.system("curl %s > pkgs/%s" % (download_path, package))
 
 
 def printer(results):
