@@ -50,7 +50,7 @@ def scrape_pkgs(version):
                     
     if pkgs == {}:
         print "No results found in archive.  Please choose a different version."
-        sys.exit()
+        sys.exit(1)
     return pkgs
 
 def writer(location, package):
