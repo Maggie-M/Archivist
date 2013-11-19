@@ -7,6 +7,8 @@ import urllib
 from bs4 import BeautifulSoup
 from termcolor import colored
 
+version = "0.1"
+
 def scrape_pkgs(version):
     """Find all Anaconda packages of a specified version
     and populate a dict for md5 and size checking."""
