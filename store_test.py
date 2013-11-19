@@ -21,7 +21,7 @@ ipython -c "import iopro, numbapro, llvmpy"
 """
 
 def scrape_pkgs(version):
-    """Find and download all Anaconda packages of a specified version
+    """Find all Anaconda packages of a specified version
     and populate a dict for md5 and size checking."""
 
     BASE_URL = "http://repo.continuum.io/archive/"
@@ -46,33 +46,30 @@ def scrape_pkgs(version):
         if pkg_name:
                 if ver == version:
                     pkgs[pkg_name] = md5, size
-                    download_path =  os.path.join(BASE_URL, pkg_name)
-                    print "Downloading file %s" % pkg_name
-                    url = urllib.urlopen(download_path) # replace with curl
-                    tmpfile = open('full/%s' % pkg_name, 'w')
-
-                    # initialize and start progress bar here
-
-                    # these two lines get replaced with a loop that reads chunks and updates
-                    # a progress bar
-                    data = url.read()
-                    tmpfile.write(data)
-
-                    # finish progress bar here
-
-                    tmpfile.close
+                    writer(BASE_URL, pkg_name)
                     
     if pkgs == {}:
         print "No results found in archive.  Please choose a different version."
         sys.exit()
     return pkgs
 
+def writer(location, package):
+    """Download packages by writing them to a file in ~/Store-tester/pkgs/
+    """
+
+    download_path =  os.path.join(location, package)
+    print colored("Downloading file %s" % package, "yellow")
+    # url = os.system("curl -O %s" % download_path)
+
+    os.system("curl %s > pkgs/%s" % (download_path, package))         #'pkgs/%s' % package, 'w')
+
+
 def printer(results):
     headers = ('Name','md5','Filesize')
     print "%-35s %-25s %-30s" % headers
     print "-"*35, "-"*25, "-"*30
     for result in results:
-        # add extra space to middle field to account for hidden color control characters
+        # adds extra space to middle field to account for hidden color control characters
         print "%-35s %-34s %-30s" % (result, results[result][0], results[result][1])
 
 def reader(path, dirDict, pkg):
@@ -111,16 +108,16 @@ def tester(ver):
     pkg_dict = scrape_pkgs(ver)
     results = {}
     path = os.getcwd()
-    testpath = os.path.join(path, 'full')
+    testpath = os.path.join(path, 'pkgs')
     packages = os.listdir(testpath)
 
     print ""
 
     for pkg in packages:
         if pkg in pkg_dict:
-            print colored("Directory: %s, package: %s.\n" % ('full', pkg), "green")
+            print colored("Package: %s.\n" % pkg, "green")
 
-            pkgpath = os.path.join(path, 'full', pkg)
+            pkgpath = os.path.join(path, 'pkgs', pkg)
             md5 = reader(pkgpath, pkg_dict, pkg)
             size = sizer(pkgpath, pkg_dict, pkg)
             results.update({pkg:(md5,size)})
@@ -141,9 +138,9 @@ def licenseCheck():
 
     for license in licenses:
         print license
-        cmd('mv %s ~/.continuum/.' % license)
+        cmd('mv %s %s.' % license, destination)
         cmd('ipython -c "import iopro, numbapro, llvmpy"')
-        cmd('mv ~/.continuum/* %s/.' % testpath)
+        cmd('mv %s* %s/.' % destination, testpath)
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:

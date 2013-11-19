@@ -26,6 +26,7 @@ Dependencies
 
    $ conda install beautiful-soup
    
+   
 * `termcolor <https://pypi.python.org/pypi/termcolor>`_
 
 .. code-block:: bash
