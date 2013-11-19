@@ -7,19 +7,6 @@ import urllib
 from bs4 import BeautifulSoup
 from termcolor import colored
 
-
-""" TODO
-
-Add command line automation for license checking:
-
-ipython -c "import iopro, numbapro, llvmpy"
- for license in licenses:
-     mv licenses/<license> ~/.continuum/.
-     ipython -c "import iopro, numbapro, llvmpy"
-     check output message
-     mv ~/.continuum/* licenses/.
-"""
-
 def scrape_pkgs(version):
     """Find all Anaconda packages of a specified version
     and populate a dict for md5 and size checking."""
