@@ -2,13 +2,13 @@
 Continuum Store Tester
 ======================
 
-The store tester is used to check the md5 and file size of any version of `Anaconda <https://store.continuum.io/cshop/anaconda/>`_ against the expected md5 and size listed in the archive.
+Archivist is used to check the md5 and file size of any version of `Anaconda <https://store.continuum.io/cshop/anaconda/>`_ against the expected md5 and size listed in the archive.
 
 ===
 Use
 ===
 
-From the Store-test directory, run the script, giving the desired version of Anaconda as an argument:
+From the Archivist directory, run the script, giving the desired version of Anaconda as an argument:
 
 .. code-block:: bash
 
