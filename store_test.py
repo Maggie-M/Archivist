@@ -4,14 +4,25 @@ import re
 import sys
 import urllib
 
-try:
-    from bs4 import BeautifulSoup
-    from termcolor import colored
-except ImportError:
-    print "Script requires termcolor and bs4 (BeautifulSoup) to run.  Please use pip to install."
-    sys.exit(1)
-
 Version = "0.1"
+
+deps = ("bs4","termcolor")
+
+def depend_check(deps):
+    found = True
+
+    for dependency in deps:
+        try:
+            __import__(dependency)
+        except ImportError as e:
+            print e
+            found = False
+
+    if not found:
+        print "Please use pip to install any missing dependencies."
+        sys.exit(1)
+    else:
+        return True
 
 def scrape_pkgs(version):
     """Find all Anaconda packages of a specified version
@@ -139,10 +150,13 @@ def licenseCheck():
         cmd('mv %s* %s/.' % destination, testpath)
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        version = sys.argv[1]
-    else:
-        print "Please choose a version of Anaconda to test ('python storetest.py 1.7.0')"
-        sys.exit(1)
+    if depend_check(deps):
+        from bs4 import BeautifulSoup
+        from termcolor import colored
+        if len(sys.argv) == 2:
+            version = sys.argv[1]
+        else:
+            print "Please choose a version of Anaconda to test ('python storetest.py 1.7.0')"
+            sys.exit(1)
     results = tester(version)
 # license_check = licenseCheck()        
