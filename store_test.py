@@ -4,25 +4,9 @@ import re
 import sys
 import urllib
 
+from utils import depend_check
+
 Version = "0.1"
-
-deps = ("bs4","termcolor")
-
-def depend_check(deps):
-    found = True
-
-    for dependency in deps:
-        try:
-            __import__(dependency)
-        except ImportError as e:
-            print e
-            found = False
-
-    if not found:
-        print "Please use pip to install any missing dependencies."
-        sys.exit(1)
-    else:
-        return True
 
 def scrape_pkgs(version):
     """Find all Anaconda packages of a specified version
@@ -150,7 +134,7 @@ def licenseCheck():
         cmd('mv %s* %s/.' % destination, testpath)
 
 if __name__ == '__main__':
-    if depend_check(deps):
+    if depend_check("bs4","termcolor"):
         from bs4 import BeautifulSoup
         from termcolor import colored
         if len(sys.argv) == 2:
