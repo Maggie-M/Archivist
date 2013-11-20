@@ -42,7 +42,7 @@ def scrape_pkgs(version):
     return pkgs
 
 def writer(location, package):
-    """Download packages by writing them to a file in ~/Store-tester/pkgs/
+    """Download packages by writing them to a file in ~/Archivist/pkgs/
     """
 
     download_path =  os.path.join(location, package)
@@ -140,7 +140,7 @@ if __name__ == '__main__':
         if len(sys.argv) == 2:
             version = sys.argv[1]
         else:
-            print "Please choose a version of Anaconda to test ('python storetest.py 1.7.0')"
+            print "Please choose a version of Anaconda to test ('python archivist.py 1.7.0')"
             sys.exit(1)
     results = tester(version)
 # license_check = licenseCheck()        
