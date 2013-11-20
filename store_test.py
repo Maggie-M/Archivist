@@ -7,7 +7,7 @@ import urllib
 try:
     from bs4 import BeautifulSoup
     from termcolor import colored
-except ImportError as e:
+except ImportError:
     print "Script requires termcolor and bs4 (BeautifulSoup) to run.  Please use pip to install."
     sys.exit(1)
 
