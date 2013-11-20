@@ -120,19 +120,6 @@ def tester(ver):
 
     printer(results)
 
-def licenseCheck():
-    testpath = os.path.join(os.getcwd(), 'licenses')
-    print testpath
-    licenses = os.listdir(testpath)
-    cmd = os.system
-    destination = os.path.expanduser('~/.continuum/')
-
-    for license in licenses:
-        print license
-        cmd('mv %s %s.' % license, destination)
-        cmd('ipython -c "import iopro, numbapro, llvmpy"')
-        cmd('mv %s* %s/.' % destination, testpath)
-
 if __name__ == '__main__':
     if depend_check("bs4","termcolor"):
         from bs4 import BeautifulSoup
@@ -143,4 +130,3 @@ if __name__ == '__main__':
             print "Please choose a version of Anaconda to test ('python archivist.py 1.7.0')"
             sys.exit(1)
     results = tester(version)
-# license_check = licenseCheck()        
