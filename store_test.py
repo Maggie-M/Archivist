@@ -4,10 +4,14 @@ import re
 import sys
 import urllib
 
-from bs4 import BeautifulSoup
-from termcolor import colored
+try:
+    from bs4 import BeautifulSoup
+    from termcolor import colored
+except ImportError as e:
+    print "Script requires termcolor and bs4 (BeautifulSoup) to run.  Please use pip to install."
+    sys.exit(1)
 
-version = "0.1"
+Version = "0.1"
 
 def scrape_pkgs(version):
     """Find all Anaconda packages of a specified version
