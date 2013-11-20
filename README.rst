@@ -37,5 +37,5 @@ Dependencies
 TODO
 ====
 
-Automated license checking.
+Allow for selection of individual packages.
 
