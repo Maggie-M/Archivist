@@ -77,7 +77,7 @@ def reader(path, dirDict, pkg):
             break
         else:
             m.update(next)
-    print "expcted md5: %s, actual md5: %s" % (expectedmd5, result)
+    print "expected md5: %s, actual md5: %s" % (expectedmd5, result)
 
     if expectedmd5 == result:
         return colored("Correct md5", "cyan")
