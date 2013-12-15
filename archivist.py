@@ -47,7 +47,6 @@ def writer(location, package):
 
     download_path =  os.path.join(location, package)
     print colored("Downloading file %s" % package, "yellow")
-    # url = os.system("curl -O %s" % download_path)
 
     if not os.path.exists("pkgs"):
         os.system("mkdir pkgs")
