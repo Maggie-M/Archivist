@@ -4,8 +4,6 @@ import re
 import sys
 import urllib
 
-#Test comment for test commit 
-
 from utils import depend_check
 
 Version = "0.1"
