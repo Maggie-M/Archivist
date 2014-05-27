@@ -1,27 +1,40 @@
 import hashlib
 import os
-import re
 import sys
 import urllib
 
 from utils import depend_check
 
-Version = "0.1"
+Version = "0.2"
 
-def scrape_pkgs(version):
-    """Find all Anaconda packages of a specified version
-    and populate a dict for md5 and size checking."""
 
+def get_archive():
+    """Read Continuum archive and return its URL and html
+    as two separate strings."""
     BASE_URL = "http://repo.continuum.io/archive/"
-    page = urllib.urlopen(os.path.join(BASE_URL, "index.html"))
+
+    try:
+        page = urllib.urlopen(os.path.join(BASE_URL, "index.html"))
+    except IOError:
+        print "Unable to connect to %s" % BASE_URL
+        sys.exit(1)
+
     html_doc = page.read()
     page.close()
+
+    return BASE_URL, html_doc
+
+
+def scrape_pkgs(version, archive_link, html_doc):
+    """Find all Anaconda packages of a specified version within an html document
+    and populate a dict for md5 and size checking."""
 
     soup = BeautifulSoup(html_doc)
 
     pkgs = {}
     for tr in soup.find_all('tr'):
-        pkg_name = '' # The first <tr>'s children are <th> tags and we want <td>'s, so we're skipping them like this.
+        # The first <tr>'s children are <th> tags and we want <td>'s, so we're skipping them like this.
+        pkg_name = ''
         for i, td in enumerate(tr.find_all('td')):
             if i == 0:
                 link = td.a
@@ -34,18 +47,19 @@ def scrape_pkgs(version):
         if pkg_name:
                 if ver == version:
                     pkgs[pkg_name] = md5, size
-                    writer(BASE_URL, pkg_name)
-                    
+                    writer(archive_link, pkg_name)
+
     if pkgs == {}:
         print "No results found in archive.  Please choose a different version."
         sys.exit(1)
     return pkgs
 
+
 def writer(location, package):
     """Download packages by writing them to a file in ~/Archivist/pkgs/
     """
 
-    download_path =  os.path.join(location, package)
+    download_path = os.path.join(location, package)
     print colored("Downloading file %s" % package, "yellow")
 
     if not os.path.exists("pkgs"):
@@ -55,17 +69,17 @@ def writer(location, package):
 
 
 def printer(results):
-    headers = ('Name','md5','Filesize')
+    headers = ('Name', 'md5', 'Filesize')
     print "%-35s %-25s %-30s" % headers
     print "-"*35, "-"*25, "-"*30
     for result in results:
         # adds extra space to middle field to account for hidden color control characters
         print "%-35s %-34s %-30s" % (result, results[result][0], results[result][1])
 
+
 def reader(path, dirDict, pkg):
     """Compare package md5 with the archive's expected md5"""
     expectedmd5 = dirDict[pkg][0]
-    items = os.listdir(os.getcwd())
     f = open(path, "r+")
     m = hashlib.md5()
     while True:
@@ -81,8 +95,9 @@ def reader(path, dirDict, pkg):
     if expectedmd5 == result:
         return colored("Correct md5", "cyan")
     else:
-        print  "Expected md5: %s\nActual md5:   %s" % (colored(expectedmd5, "green"), colored(result, "red")) + "\n"
+        print "Expected md5: %s\nActual md5: %s" % (colored(expectedmd5, "green"), colored(result, "red")) + "\n"
         return colored("Incorrect md5", "red")
+
 
 def sizer(path, dirDict, pkg):
     """Compare package size with the archive's expected size"""
@@ -94,8 +109,10 @@ def sizer(path, dirDict, pkg):
     else:
         return colored("Incorrect size", "red")
 
+
 def tester(ver):
-    pkg_dict = scrape_pkgs(ver)
+    archive_link, html_doc = get_archive()
+    pkg_dict = scrape_pkgs(ver, archive_link, html_doc)
     results = {}
     path = os.getcwd()
     testpath = os.path.join(path, 'pkgs')
@@ -110,17 +127,17 @@ def tester(ver):
             pkgpath = os.path.join(path, 'pkgs', pkg)
             md5 = reader(pkgpath, pkg_dict, pkg)
             size = sizer(pkgpath, pkg_dict, pkg)
-            results.update({pkg:(md5,size)})
+            results.update({pkg: (md5, size)})
 
         else:
             print colored("!! UNEXPECTED FILE %s !!\n" % pkg, "magenta")
 
-        print colored("-", "yellow")*60 + "\n"  # make a yellow seperator 
+        print colored("-", "yellow")*60 + "\n"  # make a yellow seperator
 
     printer(results)
 
 if __name__ == '__main__':
-    if depend_check("bs4","termcolor"):
+    if depend_check("bs4", "termcolor"):
         from bs4 import BeautifulSoup
         from termcolor import colored
         if len(sys.argv) == 2:
