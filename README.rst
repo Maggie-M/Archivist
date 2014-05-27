@@ -32,6 +32,8 @@ Dependencies
 .. code-block:: bash
 
    $ pip install termcolor
+   
+* `curl <http://curl.haxx.se/docs/manpage.html>`_
 
 ====
 TODO
