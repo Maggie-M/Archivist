@@ -9,11 +9,11 @@ def depend_check(*deps):
         try:
             __import__(dependency)
         except ImportError as e:
-            print e
+            print(e)
             found = False
 
     if not found:
-        print "Please use pip to install any missing dependencies."
+        print("Please use pip to install any missing dependencies.")
         sys.exit(1)
     else:
         return True
