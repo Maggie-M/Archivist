@@ -100,16 +100,21 @@ def writer(location, package):
 def reader(path, dirDict, pkg):
     """Compare package md5 with the archive's expected md5"""
     expectedmd5 = dirDict[pkg][0]
-    f = open(path, "r+")
-    m = hashlib.md5()
-    while True:
-        next = f.read(2 ** 20)
-        if next == "":
-            result = m.hexdigest()
-            f.close()
-            break
-        else:
-            m.update(next)
+    # open file as binary to avoid UnicodeDecodeError in Python 3
+    # (tries to read binary file as though it's encoded in utf-8, otherwise)
+    with open(path, "rb") as f:
+        m = hashlib.md5()
+        while True:
+            text = f.read(2 ** 20)
+            # read file in binary mode, must compare to binary empty string
+            # since '' != b'' in python 3
+            if text == b'':
+                result = m.hexdigest()
+                f.close()
+                break
+            else:
+                m.update(text)
+
     print("expected md5: %s, actual md5: %s" % (expectedmd5, result))
 
     if expectedmd5 == result:
