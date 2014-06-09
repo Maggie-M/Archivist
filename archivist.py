@@ -110,7 +110,6 @@ def reader(path, dirDict, pkg):
             # since '' != b'' in python 3
             if text == b'':
                 result = m.hexdigest()
-                f.close()
                 break
             else:
                 m.update(text)
