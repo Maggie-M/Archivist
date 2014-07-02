@@ -1,5 +1,6 @@
 import sys
 
+
 def depend_check(*deps):
     """Check for missing dependencies
     """
