@@ -8,6 +8,14 @@ from utils import depend_check
 Version = "0.2"
 
 
+# TODO:
+#  Argparse:
+#    Add --verbose option to display 'downloading' information
+#    Add --log option
+#    Add --test-all option to test every version of Anaconda in the archive
+#
+# See line 158
+
 def tester(ver):
     """Run each of the test functions to determine if the md5 and Filesize
     of a given version of the Anaconda installer are the same as the one
@@ -147,6 +155,8 @@ def printer(results):
 
 if __name__ == '__main__':
     if depend_check("bs4", "termcolor"):
+        # The way these are being imported is breaking this script when imported as a module; need to fix.
+        # Maybe just take out of main check.
         from bs4 import BeautifulSoup
         from termcolor import colored
         if len(sys.argv) == 2:
