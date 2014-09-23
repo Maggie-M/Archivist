@@ -1,0 +1,25 @@
+import argparse
+import textwrap
+
+
+def get_parser():
+    """Create the parser that will be used to add arguments to the script.
+    """
+
+    parser = argparse.ArgumentParser(description=textwrap.dedent("""
+                    Downloads and tests the md5 and file size of a given version of Anaconda located in
+                    http://repo.continuum.io/archive/
+
+                    The version option (-v) allows you to select a specific version of Anaconda to download and test.
+                    This will include every system's Anaconda distribution for that version (OSX, Windows, Linux)
+
+                    The --log option will write the results of these tests to a log file.  If not enabled, results
+                    will be written to stdout.
+                    """), formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument('--log', action='store_true', dest='log', default=False,
+                        help="save a log of any errors discovered")
+    parser.add_argument('-v', '--version', action='store', default=False,
+                        help="version of Anaconda to download and test")
+
+    return parser

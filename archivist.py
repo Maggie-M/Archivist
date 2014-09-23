@@ -1,25 +1,24 @@
+from archivist_cli import get_parser
+from utils import depend_check
+
 import hashlib
 import os
 import sys
 import six.moves.urllib as urllib
 
-from utils import depend_check
-
-Version = "0.2"
+Version = "0.5"
 
 
 # TODO:
-#  Argparse:
-#    Add --verbose option to display 'downloading' information
-#    Add --log option
 #    Add --test-all option to test every version of Anaconda in the archive
-#
-# See line 158
+
 
 def tester(ver):
     """Run each of the test functions to determine if the md5 and Filesize
-    of a given version of the Anaconda installer are the same as the one
-    listed in the archive."""
+       of a given version of the Anaconda installer are the same as the one
+       listed in the archive.
+    """
+
     archive_link, html_doc = get_archive()
     pkg_dict = scrape_pkgs(ver, archive_link, html_doc)
     results = {}
@@ -43,12 +42,14 @@ def tester(ver):
 
         print(colored("-", "yellow")*60 + "\n")  # make a yellow seperator
 
-    printer(results)
+    return results
 
 
 def get_archive():
     """Read Continuum archive and return its URL and html
-    as two separate strings."""
+       as two separate strings.
+    """
+
     BASE_URL = "http://repo.continuum.io/archive/"
 
     try:
@@ -133,6 +134,7 @@ def reader(path, dirDict, pkg):
 
 def sizer(path, dirDict, pkg):
     """Compare package size with the archive's expected size"""
+
     expectedSize = dirDict[pkg][1]
     size = os.path.getsize(path) >> 20
     print("expected size: %d, actual size: %d\n" % (expectedSize, size))
@@ -142,16 +144,35 @@ def sizer(path, dirDict, pkg):
         return colored("Incorrect size", "red")
 
 
-def printer(results):
-    """Output the results of each of the tests to the terminal"""
+def printer(results, log=False):
+    """Output the results of each of the tests to the terminal or log them
+       if the 'log' optional argument is set to 'True'
+    """
+
+    if log:
+        f = open('archivist_log.txt', 'w')
+        action = f.write()
+    else:
+        action = print_function
+
     headers = ('Name', 'md5', 'Filesize')
-    print("%-35s %-25s %-30s" % headers)
+    action("%-35s %-25s %-30s" % headers)
     border = ["-"*35, "-"*25, "-"*30]
-    print(" ".join(border))
+    action(" ".join(border))
     for result in results:
         # adds extra space to middle field to account for hidden color control characters
-        print("%-35s %-34s %-30s" % (result, results[result][0], results[result][1]))
+        action("%-35s %-34s %-30s" % (result, results[result][0], results[result][1]))
 
+    if log:
+        f.close()
+
+
+def print_function(string):
+    """A generic function to print a string.  Necessary for line 151, where it would be impossible
+       to bind 'print' to a variable in python2 otherwise.
+    """
+
+    print(string)
 
 if __name__ == '__main__':
     if depend_check("bs4", "termcolor"):
@@ -159,9 +180,14 @@ if __name__ == '__main__':
         # Maybe just take out of main check.
         from bs4 import BeautifulSoup
         from termcolor import colored
-        if len(sys.argv) == 2:
-            version = sys.argv[1]
+
+        parser = get_parser()
+        args = parser.parse_args()
+        if args.version:
+            version = args.version
         else:
-            print("Please choose a version of Anaconda to test ('python archivist.py 1.7.0')")
+            print("Please choose a version of Anaconda to test ('python archivist.py -v 1.7.0')")
             sys.exit(1)
+
     results = tester(version)
+    printer(results, args.log)
