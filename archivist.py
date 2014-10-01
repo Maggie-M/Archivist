@@ -36,6 +36,10 @@ def tester(ver):
             pkgpath = os.path.join(path, 'pkgs', pkg)
             md5 = reader(pkgpath, pkg_dict, pkg)
             size = sizer(pkgpath, pkg_dict, pkg)
+            if not args.log:
+                md5 = colorizer(md5)
+                size = colorizer(md5)
+
             results.update({pkg: (md5, size)})
 
         else:
@@ -127,10 +131,10 @@ def reader(path, dirDict, pkg):
     print("expected md5: %s, actual md5: %s" % (expectedmd5, result))
 
     if expectedmd5 == result:
-        return colored("Correct md5", "cyan")
+        return "Correct md5"
     else:
         print("Expected md5: %s\nActual md5: %s" % (colored(expectedmd5, "green"), colored(result, "red")) + "\n")
-        return colored("Incorrect md5", "red")
+        return "Incorrect md5"
 
 
 def sizer(path, dirDict, pkg):
@@ -140,9 +144,21 @@ def sizer(path, dirDict, pkg):
     size = os.path.getsize(path) >> 20
     print("expected size: %d, actual size: %d\n" % (expectedSize, size))
     if expectedSize == size:
-        return colored("Correct size", "green")
+        return "Correct size"
     else:
-        return colored("Incorrect size", "red")
+        return "Incorrect size"
+
+
+def colorizer(string):
+    """Apply proper color formatting to strings
+    """
+
+    if string.split(" ")[0] == "Correct":
+        string = colored(string, "green")
+    else:
+        string = colored(string, "red")
+
+    return string
 
 
 def formatter(results):
@@ -182,7 +198,7 @@ def printer(results_list, log=False):
 
 
 def print_function(string):
-    """A generic function to print a string.  Necessary for line 151, where it would be impossible
+    """A generic function to print a string.  Necessary for line 187, where it would be impossible
        to bind 'print' to a variable in python2 otherwise.
     """
 
@@ -206,3 +222,5 @@ if __name__ == '__main__':
     results = tester(version)
 
     printer(formatter(results), args.log)
+
+    print results
