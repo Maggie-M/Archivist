@@ -10,7 +10,8 @@ Version = "0.5"
 
 
 # TODO:
-#    Add --test-all option to test every version of Anaconda in the archive
+#    Remove all instances of 'colored' from various functions and place them
+#    in a color_formatter function that will only be called if args.log==False
 
 
 def tester(ver):
@@ -144,24 +145,37 @@ def sizer(path, dirDict, pkg):
         return colored("Incorrect size", "red")
 
 
-def printer(results, log=False):
+def formatter(results):
+    """Takes a results dictionary and returns a formatted list
+    that includes a header, border, and proper spacing
+    """
+
+    formatted_results = []
+
+    headers = ('Name', 'md5', 'Filesize')
+    formatted_results.append("%-35s %-25s %-30s" % headers)
+    border = ["-"*35, "-"*25, "-"*30]
+    formatted_results.append(" ".join(border))
+    for result in results:
+        # adds extra space to middle field to account for hidden color control characters
+        formatted_results.append("%-35s %-34s %-30s" % (result, results[result][0], results[result][1]))
+    print formatted_results
+    return formatted_results
+
+
+def printer(results_list, log=False):
     """Output the results of each of the tests to the terminal or log them
        if the 'log' optional argument is set to 'True'
     """
 
     if log:
         f = open('archivist_log.txt', 'w')
-        action = f.write()
+        action = f.write
     else:
         action = print_function
 
-    headers = ('Name', 'md5', 'Filesize')
-    action("%-35s %-25s %-30s" % headers)
-    border = ["-"*35, "-"*25, "-"*30]
-    action(" ".join(border))
-    for result in results:
-        # adds extra space to middle field to account for hidden color control characters
-        action("%-35s %-34s %-30s" % (result, results[result][0], results[result][1]))
+    for line in results_list:
+        action(line)
 
     if log:
         f.close()
@@ -190,4 +204,5 @@ if __name__ == '__main__':
             sys.exit(1)
 
     results = tester(version)
-    printer(results, args.log)
+
+    printer(formatter(results), args.log)
