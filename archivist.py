@@ -10,8 +10,7 @@ Version = "0.5"
 
 
 # TODO:
-#    Remove all instances of 'colored' from various functions and place them
-#    in a color_formatter function that will only be called if args.log==False
+#       Fix formatting of log file.
 
 
 def tester(ver):
