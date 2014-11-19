@@ -197,7 +197,7 @@ def printer(results_list, log=False):
 
 
 def print_function(string):
-    """A generic function to print a string.  Necessary for line 187, where it would be impossible
+    """A generic function to print a string.  Necessary for line 190, where it would be impossible
        to bind 'print' to a variable in python2 otherwise.
     """
 
