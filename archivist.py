@@ -6,8 +6,6 @@ import os
 import sys
 import six.moves.urllib as urllib
 
-Version = "0.5"
-
 
 # TODO:
 #       Fix formatting of log file.
@@ -19,7 +17,9 @@ def tester(ver):
        listed in the archive.
     """
 
-    archive_link, html_doc = get_archive()
+    archive_link = "http://repo.continuum.io/archive/"
+
+    html_doc = get_html(archive_link)
     pkg_dict = scrape_pkgs(ver, archive_link, html_doc)
     results = {}
     path = os.getcwd()
@@ -49,23 +49,21 @@ def tester(ver):
     return results
 
 
-def get_archive():
-    """Read Continuum archive and return its URL and html
-       as two separate strings.
+def get_html(some_url):
+    """Parse a webpage's html
+       as a string.
     """
 
-    BASE_URL = "http://repo.continuum.io/archive/"
-
     try:
-        page = urllib.request.urlopen(os.path.join(BASE_URL, "index.html"))
+        page = urllib.request.urlopen(os.path.join(some_url, "index.html"))
     except IOError:
-        print("Unable to connect to %s" % BASE_URL)
+        print("Unable to connect to %s" % some_url)
         sys.exit(1)
 
     html_doc = page.read()
     page.close()
 
-    return BASE_URL, html_doc
+    return html_doc
 
 
 def scrape_pkgs(version, archive_link, html_doc):
@@ -174,13 +172,12 @@ def formatter(results):
     for result in results:
         # adds extra space to middle field to account for hidden color control characters
         formatted_results.append("%-35s %-34s %-30s" % (result, results[result][0], results[result][1]))
-    print formatted_results
     return formatted_results
 
 
 def printer(results_list, log=False):
     """Output the results of each of the tests to the terminal or log them
-       if the 'log' optional argument is set to 'True'
+       if the 'log' optional argument is set to True
     """
 
     if log:
@@ -221,5 +218,3 @@ if __name__ == '__main__':
     results = tester(version)
 
     printer(formatter(results), args.log)
-
-    print results
