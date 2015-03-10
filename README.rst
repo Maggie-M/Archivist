@@ -41,3 +41,5 @@ TODO
 
 Allow for selection of individual packages.
 
+Add a gui option.
+
