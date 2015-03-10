@@ -50,7 +50,7 @@ def tester(ver):
 
 
 def get_html(some_url):
-    """Parse a webpage's html
+    """Return a webpage's html
        as a string.
     """
 
