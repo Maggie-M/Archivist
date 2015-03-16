@@ -21,10 +21,20 @@ def tester(ver):
 
     html_doc = get_html(archive_link)
     pkg_dict = scrape_pkgs(ver, archive_link, html_doc)
+
+    if not args.nodl:
+        for download in pkg_dict.iterkeys():
+            writer(archive_link, download)
+
     results = {}
     path = os.getcwd()
     testpath = os.path.join(path, 'pkgs')
     packages = os.listdir(testpath)
+
+    # In case you have called the --no-download option but have nothing in /pkgs
+    if len(packages) == 0:
+        print("Nothing in pkgs directory to test.")
+        sys.exit(1)
 
     print("")
 
@@ -88,7 +98,6 @@ def scrape_pkgs(version, archive_link, html_doc):
         if pkg_name:
                 if ver == version:
                     pkgs[pkg_name] = md5, size
-                    writer(archive_link, pkg_name)
 
     if pkgs == {}:
         print("No results found in archive.  Please choose a different version.")
