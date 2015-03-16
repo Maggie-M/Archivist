@@ -21,6 +21,11 @@ def tester(ver):
 
     html_doc = get_html(archive_link)
     pkg_dict = scrape_pkgs(ver, archive_link, html_doc)
+
+    if not args.nodl:
+        for download in pkg_dict.iterkeys():
+            writer(archive_link, download)
+
     results = {}
     path = os.getcwd()
     testpath = os.path.join(path, 'pkgs')
@@ -88,7 +93,6 @@ def scrape_pkgs(version, archive_link, html_doc):
         if pkg_name:
                 if ver == version:
                     pkgs[pkg_name] = md5, size
-                    writer(archive_link, pkg_name)
 
     if pkgs == {}:
         print("No results found in archive.  Please choose a different version.")

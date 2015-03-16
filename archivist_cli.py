@@ -21,5 +21,7 @@ def get_parser():
                         help="save a log of any errors discovered")
     parser.add_argument('-v', '--version', action='store', default=False,
                         help="version of Anaconda to download and test")
+    parser.add_argument('--no-download', action='store_true', dest='nodl', default=False,
+                        help="test local anaconda packages in pkgs, rather than download new ones")
 
     return parser
