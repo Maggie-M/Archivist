@@ -31,6 +31,11 @@ def tester(ver):
     testpath = os.path.join(path, 'pkgs')
     packages = os.listdir(testpath)
 
+    # In case you have called the --no-download option but have nothing in /pkgs
+    if len(packages) == 0:
+        print("Nothing in pkgs directory to test.")
+        sys.exit(1)
+
     print("")
 
     for pkg in packages:
