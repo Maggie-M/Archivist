@@ -30,7 +30,7 @@ def tester(ver):
 
     for pkg in packages:
         if pkg in pkg_dict:
-            print(colored("Package: %s.\n" % pkg, "green"))
+            print(colored("Package: %s\n" % pkg, "green"))
 
             pkgpath = os.path.join(path, 'pkgs', pkg)
             md5 = reader(pkgpath, pkg_dict, pkg)
