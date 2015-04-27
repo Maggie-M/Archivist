@@ -20,7 +20,7 @@ Each version of Anaconda meeting this requirement will be downloaded from the `C
 Dependencies
 ============
 
-* [OPTIONAL] The `conda <https://http://conda.pydata.org/miniconda.html#miniconda>`_ package manager.
+* [OPTIONAL] The `conda <https://conda.pydata.org/miniconda.html#miniconda>`_ package manager.
 
 
 * `beautifulsoup4 <http://www.crummy.com/software/BeautifulSoup/>`_ - Now available in `Anaconda 1.8.0 <https://store.continuum.io/cshop/anaconda/>`_
