@@ -6,9 +6,17 @@ import os
 import sys
 import six.moves.urllib as urllib
 
-
-# TODO:
-#       Fix formatting of log file.
+try:
+    import colorama
+    def blue(text): return "%s%s%s" % (colorama.Fore.BLUE, text, colorama.Style.RESET_ALL)
+    def red(text): return "%s%s%s" % (colorama.Fore.RED, text, colorama.Style.RESET_ALL)
+    def green(text): return "%s%s%s" % (colorama.Fore.GREEN, text, colorama.Style.RESET_ALL)
+    def yellow(text): return "%s%s%s" % (colorama.Fore.YELLOW, text, colorama.Style.RESET_ALL)
+except ImportError:
+    def blue(text) : return text
+    def red(text) : return text
+    def green(text) : return text
+    def yellow(text) : return text
 
 
 def tester(ver):
@@ -40,7 +48,7 @@ def tester(ver):
 
     for pkg in packages:
         if pkg in pkg_dict:
-            print(colored("Package: %s\n" % pkg, "green"))
+            print(green("Package: %s\n" % pkg))
 
             pkgpath = os.path.join(path, 'pkgs', pkg)
             md5 = reader(pkgpath, pkg_dict, pkg)
@@ -52,9 +60,9 @@ def tester(ver):
             results.update({pkg: (md5, size)})
 
         else:
-            print(colored("!! UNEXPECTED FILE %s !!\n" % pkg, "magenta"))
+            print(blue("!! UNEXPECTED FILE %s !!\n" % pkg))
 
-        print(colored("-", "yellow")*60 + "\n")  # make a yellow seperator
+        print(yellow("-")*60 + "\n")  # make a yellow seperator
 
     return results
 
@@ -109,7 +117,7 @@ def writer(location, package):
     """Download packages by writing them to a file in ~/Archivist/pkgs/"""
 
     download_path = os.path.join(location, package)
-    print(colored("Downloading file %s" % package, "yellow"))
+    print(yellow("\nDownloading file %s" % package))
 
     if not os.path.exists("pkgs"):
         os.system("mkdir pkgs")
@@ -139,7 +147,7 @@ def reader(path, dirDict, pkg):
     if expectedmd5 == result:
         return "Correct md5"
     else:
-        print("Expected md5: %s\nActual md5: %s" % (colored(expectedmd5, "green"), colored(result, "red")) + "\n")
+        print("Expected md5: %s\nActual md5: %s" % (green(expectedmd5), red(result)) + "\n")
         return "Incorrect md5"
 
 
@@ -160,9 +168,9 @@ def colorizer(string):
     """
 
     if string.split(" ")[0] == "Correct":
-        string = colored(string, "green")
+        string = green(string)
     else:
-        string = colored(string, "red")
+        string = red(string)
 
     return string
 
@@ -203,26 +211,27 @@ def printer(results_list, log=False):
 
 
 def print_function(string):
-    """A generic function to print a string.  Necessary for line 190, where it would be impossible
+    """A generic function to print a string.  Necessary for line 200, where it would be impossible
        to bind 'print' to a variable in python2 otherwise.
     """
 
     print(string)
 
 if __name__ == '__main__':
-    if depend_check("bs4", "termcolor"):
-        # The way these are being imported is breaking this script when imported as a module; need to fix.
-        # Maybe just take out of main check.
-        from bs4 import BeautifulSoup
-        from termcolor import colored
+    parser = get_parser()
+    args = parser.parse_args()
 
-        parser = get_parser()
-        args = parser.parse_args()
-        if args.version:
-            version = args.version
-        else:
-            print("Please choose a version of Anaconda to test ('python archivist.py -v 1.7.0')")
-            sys.exit(1)
+    print("Checking for dependencies...")
+    if depend_check('archivist', 'bs4'):
+        from bs4 import BeautifulSoup
+    else:
+        sys.exit(1)
+
+    if args.version:
+        version = args.version
+    else:
+        print("Please choose a version of Anaconda to test ('python archivist.py -v 1.7.0')")
+        sys.exit(1)
 
     results = tester(version)
 
