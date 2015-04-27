@@ -1,12 +1,12 @@
 import sys
 
 
-def depend_check(*deps):
+def depend_check(*args):
     """Check for missing dependencies
     """
     found = True
 
-    for dependency in deps:
+    for dependency in args:
         try:
             __import__(dependency)
         except ImportError as e:
@@ -14,7 +14,7 @@ def depend_check(*deps):
             found = False
 
     if not found:
-        print("Please use pip to install any missing dependencies.")
+        print("Please use conda or pip to install any missing dependencies.")
         sys.exit(1)
     else:
         return True
