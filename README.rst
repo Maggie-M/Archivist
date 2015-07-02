@@ -12,7 +12,7 @@ From the Archivist directory, run the script, giving the desired version of Anac
 
 .. code-block:: bash
 
-    $ python archivist.py 1.5.0
+    $ python archivist.py -v 1.5.0
 
 Each version of Anaconda meeting this requirement will be downloaded from the `Continuum <http://continuum.io>`_  archives, then checked to be sure that the size and md5 are correct.
 
