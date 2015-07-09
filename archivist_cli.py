@@ -15,6 +15,10 @@ def get_parser():
 
                     The --log option will write the results of these tests to a log file.  If not enabled, results
                     will be written to stdout.
+
+                    If you already have Anaconda installers inside the pkgs directory and wish to test those without
+                    downloading new ones, use the --no-download option.  NOTE: You will still need to provide the
+                    version (-v) of the installers.
                     """), formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument('--log', action='store_true', dest='log', default=False,
